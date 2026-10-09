@@ -55,13 +55,16 @@
 
 ### 第 1 步：U-Boot 恢复模式强刷过渡固件
 
-1. 电脑网线接京东云 **WAN（蓝口）**。
-2. 电脑网卡设静态 IP `192.168.68.2/24`（网关留空）。
+1. 电脑网线接京东云 **WAN（蓝口）**；若试出来是死的，改插 **LAN（黑口）** 再试（见下方说明）。
+2. 电脑网卡设静态 IP `192.168.68.2/24`（网关留空）；官方救砖文档用的是 `192.168.68.10/24`，同段即可。
 3. 京东云断电 → 长按 RESET 通电进 U-Boot 恢复（或原厂系统自带恢复入口）→ 浏览器开 `http://192.168.68.1/`。
 4. Choose File → 选 `jdcloud-1-transitional.zip` 解压出的过渡固件（或仓库内 `jd_trans.bin`）→ Upload。
 5. 出现确认页 → **核对 MD5 / 大小 → 必须点 `Proceed`** 才真正刷写并重启（灯会快速闪烁，约 1~2 分钟）。
 
-> 🔴 **关键坑**：U-Boot 恢复是**两步流程**（Upload → Confirm 页点 Proceed）。只传不点 Proceed = 没刷进去，灯不闪、设备一直停在恢复模式（肉眼很容易看漏）。
+> ⚠️ **批次差异（重要）**：MT7621 的 U-Boot 通常只初始化**一个网口**，不同批次不保证是同一个。
+> 京东官方救砖文档写的是「网线接 **LAN 口**、**WAN 口不接任何线**、电脑关 WiFi」；也有实测是 WAN 蓝口才通。
+> **判定办法**：接好线后 ping `192.168.68.1`，或用网卡入包统计看是否有回应，**哪个口有回应就用哪个**，三个口依次试过去。
+> 别拿 LED 灯当依据——红灯常亮不代表在 U-Boot 里（红灯实际是 eMMC 读写指示）。
 
 ### 第 2 步：进过渡固件、刷 Breed
 
@@ -181,8 +184,9 @@ block mount
 
 ## 六、常见问题
 
-- **进不去 192.168.1.1？** 先确认电脑 IP 同段、网线插对口、且设备是真进 Breed（断电顶 RESET 10 秒）。Breed 控制台在 `192.168.1.1`；原厂 U-Boot 恢复在 `192.168.68.1`（WAN 蓝口）。
-- **后台 IP 到底是哪个？** U-Boot 恢复 = `192.168.68.1`（WAN 蓝口）；Breed = `192.168.1.1`；官方 OpenWrt 默认 = `192.168.1.1`。
+- **进不去 192.168.1.1？** 先确认电脑 IP 同段、网线插对口、且设备是真进 Breed（断电顶 RESET 10 秒）。Breed 控制台在 `192.168.1.1`；原厂 U-Boot 恢复在 `192.168.68.1`。
+- **后台 IP 到底是哪个？** U-Boot 恢复 = `192.168.68.1`；Breed = `192.168.1.1`；官方 OpenWrt 默认 = `192.168.1.1`。
+- **三个网口都试了，`192.168.68.1` 一个包都不回？** 有些批次疑似把 U-Boot 的 Web 恢复锁掉了（表现为通电后红灯常亮不闪、网 Cipher 收不到任何包）。确认设备本身是好的（接回主路由能正常开机上网）的话，硬件没坏，只是没这个入口 → 见**第七章**的 JSON-RPC 路线或直接走 TTL 串口。
 - **Breed 报「闪存布局无效」？** 常规模式不认 FIT 格式 sysupgrade，改用「内存启动」中转（方案 A）。
 - **刷完进不去、80/443 全关？** 多半刷了 openwrt-ai(Kwrt) 之类极简版（无 LuCI、SSH 密码非页面所写）。换官方 25.12 固件即可。
 - **包管理器？** OpenWrt 25.12 用 `apk`（`apk update` / `apk add`），不是老版的 `opkg`。
@@ -191,16 +195,87 @@ block mount
 
 ---
 
-## 七、脚本说明（`scripts/`）
+## 七、附：JDCOS 原厂后台的 JSON-RPC 接口（`/jdcapi`）
+
+> 适用场景：**U-Boot 恢复进不去**（某些批次疑似锁掉了 Web 恢复，三个网口都无响应），但设备能正常开机进原厂后台时，可以先摸清这套接口评估是否还有路可走。
+
+### 接口在哪
+
+京东云的 Web 管理页是 SPA，真正的后端**不是** OpenWrt 那套 `/ubus`（对它 POST 会返回首页 HTML），而是专用的 **`/jdcapi`**，同样是 JSON-RPC 2.0 格式。
+
+登录拿到会话：
+
+```sh
+curl -s http://<路由IP>/jdcapi -H 'Content-Type: application/json' -d '{
+  "jsonrpc":"2.0","id":1,"method":"call",
+  "params":["00000000000000000000000000000000","session","login",
+            {"username":"root","password":"<你的后台密码>"}]
+}'
+```
+
+返回 `result[1].ubus_rpc_session` 就是 SID（默认 300 秒过期）。之后每次调用把 SID 填在 params 第一个位置。
+
+列举全部对象（**必须登录后再列**，未登录返回空 `{}`）：
+
+```sh
+curl -s http://<路由IP>/jdcapi -H 'Content-Type: application/json' -d '{
+  "jsonrpc":"2.0","id":2,"method":"list","params":["*"]
+}'
+```
+
+共 21 个对象，完整签名见 [`jdcos_objects.json`](jdcos_objects.json)。探测脚本见 [`scripts/jdcos_probe.py`](scripts/jdcos_probe.py)。
+
+### 实测权限边界（重点）
+
+登录返回的 ACL **看起来**是全权限：`"ubus":{"*":["*"]}`、`uci:*:read`、`luci-io.upload:write`。**但实际调用时另有一层限制**：
+
+| 分类 | 方法 | 结果 |
+|------|------|------|
+| ✅ 可用 | `jdcapi.static.*`（含 `firmware_check`、`local_upgrade_action`） | 通 |
+| ✅ 可用 | `jdcapi.app.downloader.rpcAddDownloadTask{uri,out,dir,index}` | 通（内置 aria2，可让路由器自己下载文件） |
+| ✅ 可用 | `jdcapi_app.*`、`jdcapi.basic.*` | 通 |
+| ❌ Access denied | `system.*`：`board` / `info` / `reboot` / **`sysupgrade`** / `validate_firmware_image` | 拒绝 |
+| ❌ Access denied | `service.*`：含经典套路「`service.set` 拉起 dropbear 开 SSH」 | 拒绝 |
+| ❌ 不存在 | 对象列表里**没有 `file`**（无 `exec` / `read` / `write`） | — |
+
+也就是说两条最常用的免拆路线都被堵死：
+
+1. 开 SSH → `mtd write` 刷 Breed —— **不通**（`service.set` 被拒）
+2. 直接 `sysupgrade` 刷 OpenWrt —— **不通**（`system.sysupgrade` 被拒）
+
+> ⚠️ 顺带提醒：即便能用，直接 `sysupgrade` 官方固件也不稳妥——原厂 U-Boot 不认第三方固件，**必须先有 Breed** 才能引导。
+
+### 还没走通的口子（留给后来人）
+
+唯一残存的路径是让设备**自己把固件下载进来再走官方本地升级**：
+
+```
+jdcapi.app.downloader.rpcAddDownloadTask（下载固件到设备本地）
+        ↓
+jdcapi.static.firmware_check          （固件校验，空参调用返回 [0,{"status":1}]）
+        ↓
+jdcapi.static.local_upgrade_action    （本地升级）
+```
+
+**卡点**：`local_upgrade_action` 的 rpcd 签名是空 `{}`，没试出它接受什么参数、固件该落在哪个路径（`firmware_check` 同理）。
+
+下一步建议：抓 Web 前端的升级页 JS（在 `P_Guide/` 目录下）看页面是如何传固件路径的，照着填即可打通。
+
+**如果这条路也不通**：同型号**建议直接拆机用 TTL 串口**（CP2102 线几块钱），接 UART 进 U-Boot 命令行 `mtd write`，这条路 100% 可行，且能顺手整片备份。
+
+---
+
+## 八、脚本说明（`scripts/`）
 
 - `flash_breed.py`：SSH 进过渡固件执行 `mtd write` 刷 Breed（依赖 paramiko）。
 - `configure_ap.py`：SSH 进 OpenWrt 改 UCI 配成 AP 中继模式。
 - `install_zh.py`：SSH 进 OpenWrt 装中文语言包并设默认语言。
+- `jdcos_probe.py`：**面向还没刷机的原厂 JDCOS**。扒原厂后台的 `/jdcapi` 接口——抓首页 JS 引用、批量探测常见路径、并尝试 JSON-RPC 登录，用于在 U-Boot 进不去时评估还有没有下手的空间。用法：`python jdcos_probe.py <路由IP> <后台密码>`。
 
 脚本中的密码为本机示例值，请按自己的环境修改后再用。
 
 ---
 
-## 八、免责声明
+## 九、免责声明
 
 本项目仅供学习交流，刷机有风险，操作前请备份原厂固件。因使用本教程导致的任何设备损坏或数据丢失，作者不承担责任。

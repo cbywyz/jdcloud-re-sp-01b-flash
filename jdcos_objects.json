@@ -1,0 +1,956 @@
+{
+ "dhcp": {
+  "ipv4leases": {},
+  "ipv6leases": {}
+ },
+ "jdcapi.app.downloader": {
+  "rpcAddDownloadTask": {
+   "uri": "string",
+   "out": "string",
+   "dir": "string",
+   "index": "string"
+  },
+  "rpcGetGlobalStat": {},
+  "rpcGetActiveTask": {},
+  "rpcGetWaitingTask": {
+   "num": "number",
+   "offset": "number"
+  },
+  "rpcGetStoppedTask": {
+   "num": "number",
+   "offset": "number"
+  },
+  "rpcGetTaskFiles": {
+   "gid": "string"
+  },
+  "rpcGetFileNameById": {
+   "size": "number",
+   "ids": "array"
+  },
+  "rpcPauseTask": {
+   "gid": "string"
+  },
+  "rpcUnpauseTask": {
+   "gid": "string"
+  },
+  "rpcPauseAllTask": {},
+  "rpcUnpauseAllTask": {},
+  "rpcRemoveDownloadTask": {
+   "gid": "string",
+   "del": "boolean"
+  },
+  "rpcPurgeDownloadResult": {}
+ },
+ "jdcapi.basic": {
+  "process_heartbeat": {}
+ },
+ "jdcapi.static": {
+  "get_lan_ip": {},
+  "set_lan_ip": {
+   "ipaddr": "string",
+   "netmask": "string"
+  },
+  "get_wan_info": {},
+  "get_wan6_info": {},
+  "get_initialization_info": {},
+  "set_initialization_info": {},
+  "set_initialization_complete": {
+   "sys_passwd": "string"
+  },
+  "set_wan_dhcp": {
+   "dns1": "string",
+   "dns2": "string"
+  },
+  "set_wan_pppoe": {
+   "username": "string",
+   "password": "string",
+   "dns1": "string",
+   "dns2": "string",
+   "mtu": "number"
+  },
+  "set_wan_static": {
+   "ipaddr": "string",
+   "netmask": "string",
+   "gateway": "string",
+   "dns1": "string",
+   "dns2": "string"
+  },
+  "get_wifi_info": {
+   "type": "number"
+  },
+  "set_wifi": {
+   "type": "number",
+   "enable": "string",
+   "ssid": "string",
+   "encryption": "string",
+   "key": "string",
+   "channel": "string",
+   "txpower": "string",
+   "hidden": "string",
+   "htmode": "string",
+   "hwmode": "string"
+  },
+  "guide_set_wifi": {
+   "type": "number",
+   "enable": "string",
+   "ssid": "string",
+   "encryption": "string",
+   "key": "string",
+   "channel": "string",
+   "txpower": "string",
+   "hidden": "string",
+   "htmode": "string",
+   "hwmode": "string"
+  },
+  "set_macfilter": {
+   "macpolicy": "string",
+   "enable": "string",
+   "list": "array"
+  },
+  "get_macfilter_info": {},
+  "get_lan_dhcp": {},
+  "set_lan_dhcp": {
+   "enable": "string",
+   "start": "number",
+   "end": "number",
+   "leasetime": "string"
+  },
+  "mac_clone": {
+   "macaddr": "string"
+  },
+  "mac_clone_get_macaddr": {},
+  "mac_clone_get_origin_macaddr": {},
+  "set_login_passwd": {
+   "old": "string",
+   "new": "string",
+   "confirm": "string"
+  },
+  "get_pppd_error_code": {},
+  "get_wan_connection_status": {},
+  "get_wireless_relay_status": {},
+  "reset_start": {},
+  "local_upgrade_action": {},
+  "firmware_check": {},
+  "cast_screen": {
+   "file": "string"
+  },
+  "cast_screen_data": {
+   "file": "string"
+  },
+  "set_port_forward": {
+   "on-off": "number",
+   "name": "string",
+   "proto": "string",
+   "src-dport": "string",
+   "ipaddr": "string",
+   "dest-port": "string",
+   "edit": "number"
+  },
+  "del_port_forward": {
+   "name": "string"
+  },
+  "get_port_forward": {},
+  "set_dmz": {
+   "on_off": "number",
+   "ipaddr": "string"
+  },
+  "get_dmz": {},
+  "web_get_uplink_network_mode": {},
+  "web_get_online_device_count": {},
+  "web_get_network_conn_status": {},
+  "web_set_dual_frequency_optimization": {
+   "enable": "number"
+  },
+  "web_get_dual_frequency_optimization": {},
+  "web_set_credit_mode": {
+   "mode": "string",
+   "maxValue": "string"
+  },
+  "web_get_credit_mode": {},
+  "web_set_device_limit_speed": {
+   "uid": "string",
+   "enable": "string",
+   "upload": "string",
+   "download": "string"
+  },
+  "web_set_dhcp_static_ip": {
+   "name": "string",
+   "ip": "string",
+   "mac": "string"
+  },
+  "web_del_dhcp_static_ip": {
+   "name": "string",
+   "ip": "string",
+   "mac": "string"
+  },
+  "web_get_dhcp_static_ip": {},
+  "web_get_device_list": {},
+  "set_nat_type": {
+   "type": "string"
+  },
+  "get_nat_type": {},
+  "web_get_network_flow": {},
+  "set_upnp": {
+   "enabled": "number"
+  },
+  "get_upnp": {},
+  "web_config_ddns": {
+   "action": "number",
+   "ddns_name": "string",
+   "service": "string",
+   "domain": "string",
+   "username": "string",
+   "passwd": "string",
+   "check_interval": "string",
+   "force_interval": "string"
+  },
+  "web_switch_ddns_service": {
+   "action": "number",
+   "ddns_name": "string"
+  },
+  "web_get_ddns": {
+   "ddns_name": "string"
+  },
+  "web_get_ddns_status": {},
+  "web_get_ddns_uptime": {
+   "ddns_name": "string"
+  },
+  "web_storage_inter_get_mode": {},
+  "web_storage_exter_get_all": {},
+  "web_set_wifi6_80211ax": {
+   "enabled": "number"
+  },
+  "web_get_wifi6_80211ax": {},
+  "web_get_wifi_scan_list": {},
+  "web_set_wds_config": {
+   "enable": "number",
+   "ssid": "string",
+   "encryption": "string",
+   "key": "string",
+   "channel": "string"
+  },
+  "web_guide_set_wds_config": {
+   "enable": "number",
+   "ssid": "string",
+   "encryption": "string",
+   "key": "string",
+   "channel": "string"
+  },
+  "web_get_wds_config": {},
+  "web_set_guest_limit_speed": {
+   "enable": "number",
+   "upload": "number",
+   "download": "number"
+  },
+  "web_get_guest_limit_speed": {},
+  "web_set_ipv6_relay": {
+   "enabled": "number",
+   "type": "string",
+   "dns_enabled": "number",
+   "dns1": "string",
+   "dns2": "string",
+   "fw_enable": "number"
+  },
+  "web_set_ipv6_native": {
+   "enabled": "number",
+   "type": "string",
+   "dns_enabled": "number",
+   "dns1": "string",
+   "dns2": "string",
+   "fw_enable": "number"
+  },
+  "web_set_ipv6_nat6": {
+   "enabled": "number",
+   "type": "string",
+   "dns_enabled": "number",
+   "dns1": "string",
+   "dns2": "string",
+   "fw_enable": "number"
+  },
+  "web_set_ipv6_static": {
+   "enabled": "number",
+   "type": "string",
+   "wan_ipaddr": "string",
+   "wan_gateway": "string",
+   "lan_prefix": "string",
+   "lan_prefix_len": "number",
+   "dns_enabled": "number",
+   "dns1": "string",
+   "dns2": "string",
+   "fw_enable": "number"
+  },
+  "web_get_ipv6_config": {},
+  "set_auto_upgrade": {
+   "enabled": "number"
+  },
+  "get_auto_upgrade": {},
+  "web_get_router_info": {},
+  "web_set_station_name": {
+   "uid": "string",
+   "name": "string"
+  },
+  "reboot": {},
+  "web_get_upgrade_version": {},
+  "web_start_download_firmware": {},
+  "web_get_firmware_download_percent": {},
+  "web_start_upgrade_online": {},
+  "web_get_wireless_mesh_enable": {},
+  "web_set_wireless_mesh_disable": {},
+  "web_set_router_mode": {
+   "mode": "number"
+  },
+  "web_get_router_mode": {},
+  "web_set_custom_hosts": {
+   "hosts": "string"
+  },
+  "web_get_custom_hosts": {},
+  "set_pppoe_disconnected": {},
+  "web_set_smart_gaming": {
+   "enable": "number"
+  },
+  "web_get_smart_gaming": {},
+  "set_router_wan_ifname": {
+   "ifname": "string"
+  },
+  "get_router_wan_ifname": {}
+ },
+ "jdcapi_app": {
+  "app_set_device_name": {
+   "uid": "string",
+   "name": "string"
+  },
+  "app_set_device_net": {
+   "uid": "string",
+   "enable": "string"
+  },
+  "app_set_device_access_policy": {
+   "uid": "string",
+   "enable": "string",
+   "timeswitch": "string",
+   "starttime": "string",
+   "endtime": "string",
+   "repeat1": "string",
+   "customize": "string"
+  },
+  "app_get_device_access_policy": {
+   "uid": "string"
+  },
+  "app_set_device_online_notify": {
+   "uid": "string",
+   "enable": "string"
+  },
+  "app_set_device_limit_speed": {
+   "uid": "string",
+   "enable": "string",
+   "upload": "string",
+   "download": "string"
+  },
+  "app_get_router_status_info": {},
+  "app_get_device_list": {},
+  "app_get_device_info": {
+   "uid": "string"
+  },
+  "app_delete_device_sta": {
+   "uid": "string"
+  },
+  "app_set_wifi_ssid": {
+   "radio": "string",
+   "enable": "string",
+   "ssid": "string",
+   "hidden": "string",
+   "encryp": "string",
+   "key": "string"
+  },
+  "app_get_wifi_ssid": {
+   "radio": "string"
+  },
+  "app_set_wifi_radio": {
+   "radio": "string",
+   "txpower": "string"
+  },
+  "app_get_wifi_radio": {
+   "radio": "string"
+  },
+  "app_reboot_system": {},
+  "app_set_reboot_plan": {
+   "mode": "string",
+   "starttime": "string",
+   "repeatvalue": "string",
+   "customize": "string"
+  },
+  "app_get_reboot_plan": {},
+  "app_set_update_config": {
+   "mode": "string",
+   "time": "string"
+  },
+  "app_get_update_config": {},
+  "app_get_lan_guest_config": {},
+  "app_set_lan_guest_config": {
+   "enable": "string",
+   "ssid": "string",
+   "encryp": "string",
+   "key": "string"
+  },
+  "app_get_router_status_detail": {},
+  "app_start_test_speed": {},
+  "app_set_led_status": {
+   "enable": "string"
+  },
+  "app_get_led_status": {},
+  "app_get_wifi_all_config": {},
+  "app_get_test_speed": {},
+  "app_set_samba_enable": {
+   "enable": "string"
+  },
+  "app_get_samba_status": {},
+  "app_del_all_offline_devices": {
+   "net_type": "number"
+  },
+  "app_set_credit_mode": {
+   "mode": "string",
+   "maxValue": "string"
+  },
+  "app_get_credit_mode": {},
+  "app_set_router_name": {
+   "name": "string"
+  },
+  "app_get_router_name": {},
+  "app_set_timing_switch": {
+   "switch": "string",
+   "onTime": "string",
+   "offTime": "string",
+   "repeatvalue": "string"
+  },
+  "app_get_timing_switch": {},
+  "app_get_wifi_samessid": {},
+  "app_set_wifi_samessid": {
+   "mode": "string",
+   "enable": "string",
+   "ssid": "string",
+   "encryption": "string",
+   "key": "string",
+   "hidden": "string"
+  },
+  "app_set_mesh_network": {
+   "detect_enable": "string"
+  },
+  "app_get_mesh_network_result": {},
+  "app_get_mesh_status": {},
+  "app_set_usb3_disable": {
+   "usb3_disable": "string"
+  },
+  "app_get_usb3_status": {},
+  "app_storage_inter_get_mode": {},
+  "app_storage_inter_set_mode": {
+   "mode": "string"
+  },
+  "app_storage_exter_get_all": {},
+  "app_storage_exter_get_pcdn": {},
+  "app_storage_exter_set_pcdn": {
+   "enable": "boolean",
+   "dev": "string",
+   "part": "string"
+  },
+  "app_storage_exter_set_formating": {
+   "dev": "string",
+   "part": "string"
+  },
+  "app_storage_download_get_mounted": {},
+  "app_jdc_download_get_mounted": {},
+  "app_get_nat1_status": {},
+  "app_set_nat1_status": {
+   "enabled": "number"
+  },
+  "app_get_hwnat_status": {},
+  "app_set_hwnat_status": {
+   "enabled": "number"
+  },
+  "app_system_optimizer_get_start_check": {},
+  "app_system_optimizer_get_result": {},
+  "app_system_optimizer_set_wireless": {
+   "upnp": "number",
+   "mode": "number",
+   "samessid_sw": "number",
+   "htmode_5g": "number",
+   "htmode_52g": "number",
+   "htmode_2g": "number",
+   "channel_5g": "number",
+   "channel_52g": "number",
+   "channel_2g": "number",
+   "txpower_5g": "number",
+   "txpower_52g": "number",
+   "txpower_2g": "number",
+   "smart_gaming": "string"
+  },
+  "app_get_upgrade_version": {},
+  "app_get_upgrade_firmware": {},
+  "app_get_firmware_download_percent": {},
+  "app_set_start_upgrade_firmware": {},
+  "app_storage_exter_set_status": {
+   "dev": "string"
+  },
+  "app_storage_exter_get_status": {
+   "dev": "string"
+  },
+  "app_get_tencent_booster_status": {},
+  "app_set_tencent_booster_enabled": {
+   "enabled": "string",
+   "mode": "string"
+  },
+  "app_del_all_blacklist_offline_devices": {},
+  "app_start_edge_of_computing_check": {},
+  "app_get_disk_check_result": {},
+  "app_get_system_time": {},
+  "app_set_system_time": {
+   "time": "string"
+  },
+  "app_get_dns_network_status": {},
+  "app_get_eth_interface_link_status": {},
+  "app_get_eth_interface_link_status_all": {},
+  "app_get_screen_enabled_status": {},
+  "app_set_screen_enabled_status": {
+   "enable": "string",
+   "switch": "string",
+   "time": "string",
+   "uprate": "string",
+   "downrate": "string",
+   "stanum": "string",
+   "weather": "string",
+   "points": "string",
+   "timingswitch": "string",
+   "plan": "object"
+  },
+  "app_get_smart_gaming_enabled_status": {},
+  "app_set_smart_gaming_enabled_status": {
+   "enable": "string"
+  },
+  "app_set_plugin_ctrl": {
+   "plugin_name": "string",
+   "enable": "string"
+  },
+  "app_get_plugin_status": {
+   "plugin_name": "string"
+  },
+  "update_device_list": {},
+  "get_device_list_by_page": {
+   "page": "number"
+  },
+  "app_local_get_board_info": {},
+  "app_local_device_bind": {
+   "password": "string",
+   "url": "string",
+   "token": "string",
+   "pin": "string",
+   "mac": "string"
+  },
+  "app_local_get_wan_info": {},
+  "app_local_reset_start": {},
+  "app_local_system_reset_passwd": {
+   "new_passwd": "string"
+  },
+  "app_local_set_wan_dhcp": {
+   "mtu": "number",
+   "peerdns": "boolean",
+   "dns1": "string",
+   "dns2": "string"
+  },
+  "app_local_set_wan_pppoe": {
+   "peerdns": "boolean",
+   "username": "string",
+   "password": "string",
+   "dns1": "string",
+   "dns2": "string",
+   "mtu": "number",
+   "ipaddr": "string",
+   "netmask": "string",
+   "gateway": "string"
+  },
+  "app_local_set_wan_static": {
+   "peerdns": "boolean",
+   "mtu": "number",
+   "ipaddr": "string",
+   "netmask": "string",
+   "gateway": "string",
+   "dns1": "string",
+   "dns2": "string"
+  },
+  "app_local_wan_get_status": {},
+  "app_local_wan_get_network_mode": {},
+  "app_local_wan_set_network_mode": {
+   "mode": "string"
+  },
+  "app_process_hearbeat": {},
+  "set_ipv6_switch": {
+   "enable": "number"
+  },
+  "get_ipv6_switch": {}
+ },
+ "jdcapi_evt": {
+  "report": {
+   "module": "string",
+   "level": "string",
+   "code": "string",
+   "time": "string",
+   "msg": "string",
+   "sub": "object"
+  },
+  "dump": {}
+ },
+ "jdcplugin_opt": {
+  "pcdn_clear_cache": {
+   "key1": "string"
+  },
+  "get_pcdn_status": {}
+ },
+ "network": {
+  "restart": {},
+  "reload": {},
+  "add_host_route": {
+   "target": "string",
+   "v6": "boolean",
+   "interface": "string"
+  },
+  "get_proto_handlers": {},
+  "add_dynamic": {
+   "name": "string"
+  }
+ },
+ "network.device": {
+  "status": {
+   "name": "string"
+  },
+  "set_alias": {
+   "alias": "array",
+   "device": "string"
+  },
+  "set_state": {
+   "name": "string",
+   "defer": "boolean"
+  }
+ },
+ "network.interface": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.interface.lan": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.interface.lan6": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.interface.loopback": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.interface.wan": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.interface.wan6": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "prepare": {},
+  "dump": {},
+  "add_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "remove_device": {
+   "name": "string",
+   "link-ext": "boolean"
+  },
+  "notify_proto": {},
+  "remove": {},
+  "set_data": {}
+ },
+ "network.wireless": {
+  "up": {},
+  "down": {},
+  "status": {},
+  "notify": {},
+  "get_validate": {}
+ },
+ "service": {
+  "set": {
+   "name": "string",
+   "script": "string",
+   "instances": "object",
+   "triggers": "array",
+   "validate": "array",
+   "autostart": "boolean",
+   "data": "object"
+  },
+  "add": {
+   "name": "string",
+   "script": "string",
+   "instances": "object",
+   "triggers": "array",
+   "validate": "array",
+   "autostart": "boolean",
+   "data": "object"
+  },
+  "list": {
+   "name": "string",
+   "verbose": "boolean"
+  },
+  "delete": {
+   "name": "string",
+   "instance": "string"
+  },
+  "signal": {
+   "name": "string",
+   "instance": "string",
+   "signal": "number"
+  },
+  "update_start": {
+   "name": "string"
+  },
+  "update_complete": {
+   "name": "string"
+  },
+  "event": {
+   "type": "string",
+   "data": "object"
+  },
+  "validate": {
+   "package": "string",
+   "type": "string",
+   "service": "string"
+  },
+  "get_data": {
+   "name": "string",
+   "instance": "string",
+   "type": "string"
+  },
+  "state": {
+   "spawn": "boolean",
+   "name": "string"
+  }
+ },
+ "session": {
+  "create": {
+   "timeout": "number"
+  },
+  "list": {
+   "ubus_rpc_session": "string"
+  },
+  "grant": {
+   "ubus_rpc_session": "string",
+   "scope": "string",
+   "objects": "array"
+  },
+  "revoke": {
+   "ubus_rpc_session": "string",
+   "scope": "string",
+   "objects": "array"
+  },
+  "access": {
+   "ubus_rpc_session": "string",
+   "scope": "string",
+   "object": "string",
+   "function": "string"
+  },
+  "set": {
+   "ubus_rpc_session": "string",
+   "values": "object"
+  },
+  "get": {
+   "ubus_rpc_session": "string",
+   "keys": "array"
+  },
+  "unset": {
+   "ubus_rpc_session": "string",
+   "keys": "array"
+  },
+  "destroy": {
+   "ubus_rpc_session": "string"
+  },
+  "login": {
+   "username": "string",
+   "password": "string",
+   "timeout": "number"
+  }
+ },
+ "system": {
+  "board": {},
+  "info": {},
+  "reboot": {},
+  "watchdog": {
+   "frequency": "number",
+   "timeout": "number",
+   "magicclose": "boolean",
+   "stop": "boolean"
+  },
+  "signal": {
+   "pid": "number",
+   "signum": "number"
+  },
+  "validate_firmware_image": {
+   "path": "string"
+  },
+  "sysupgrade": {
+   "path": "string",
+   "force": "boolean",
+   "backup": "string",
+   "prefix": "string",
+   "command": "string",
+   "options": "object"
+  }
+ },
+ "uci": {
+  "configs": {},
+  "get": {
+   "config": "string",
+   "section": "string",
+   "option": "string",
+   "type": "string",
+   "match": "object",
+   "ubus_rpc_session": "string"
+  },
+  "state": {
+   "config": "string",
+   "section": "string",
+   "option": "string",
+   "type": "string",
+   "match": "object",
+   "ubus_rpc_session": "string"
+  },
+  "add": {
+   "config": "string",
+   "type": "string",
+   "name": "string",
+   "values": "object",
+   "ubus_rpc_session": "string"
+  },
+  "set": {
+   "config": "string",
+   "section": "string",
+   "type": "string",
+   "match": "object",
+   "values": "object",
+   "ubus_rpc_session": "string"
+  },
+  "delete": {
+   "config": "string",
+   "section": "string",
+   "type": "string",
+   "match": "object",
+   "option": "string",
+   "options": "array",
+   "ubus_rpc_session": "string"
+  },
+  "rename": {
+   "config": "string",
+   "section": "string",
+   "option": "string",
+   "name": "string",
+   "ubus_rpc_session": "string"
+  },
+  "order": {
+   "config": "string",
+   "sections": "array",
+   "ubus_rpc_session": "string"
+  },
+  "changes": {
+   "config": "string",
+   "ubus_rpc_session": "string"
+  },
+  "revert": {
+   "config": "string",
+   "ubus_rpc_session": "string"
+  },
+  "commit": {
+   "config": "string",
+   "ubus_rpc_session": "string"
+  },
+  "apply": {
+   "rollback": "boolean",
+   "timeout": "number",
+   "ubus_rpc_session": "string"
+  },
+  "confirm": {
+   "ubus_rpc_session": "string"
+  },
+  "rollback": {
+   "ubus_rpc_session": "string"
+  },
+  "reload_config": {}
+ },
+ "upnp_nattype": {
+  "get_nattype": {},
+  "get_upnpstatus": {}
+ }
+}
