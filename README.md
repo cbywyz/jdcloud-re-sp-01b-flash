@@ -118,6 +118,65 @@
 
 > 一键配置参考脚本：`scripts/configure_ap.py`（SSH 直连改 UCI，需改密码和网段）。
 
+### 第 7 步：开启 WiFi（双频）
+
+本机自带双频无线：`radio0` = 2.4G、`radio1` = 5G。OpenWrt 里**射频开关**（`radioN.disabled`）和 **SSID 接口开关**（`default_radioN.disabled`）是两个独立开关，**两层都要开**才会真正发出信号（只开射频、不开接口层 = 射频亮但搜不到 SSID）。
+
+```sh
+# 同时打开射频层 + SSID 接口层
+uci set wireless.radio0.disabled='0'
+uci set wireless.radio1.disabled='0'
+uci set wireless.default_radio0.disabled='0'
+uci set wireless.default_radio1.disabled='0'
+
+# 2.4G：Speed / WPA2 / 密码 11.12.13.14.15
+uci set wireless.default_radio0.ssid='Speed'
+uci set wireless.default_radio0.encryption='psk2'
+uci set wireless.default_radio0.key='11.12.13.14.15'
+
+# 5G：Speed-5G / WPA2 / 同密码
+uci set wireless.default_radio1.ssid='Speed-5G'
+uci set wireless.default_radio1.encryption='psk2'
+uci set wireless.default_radio1.key='11.12.13.14.15'
+
+uci commit wireless
+wifi reload
+```
+
+> 等约 5 秒后，手机应能搜到 `Speed`（2.4G）和 `Speed-5G`（5G）。可在「网络 → 无线」页确认两个接口状态为「已连接 / 已启用」。
+
+### 第 8 步：挂载内置存储（eMMC 大分区）
+
+本机是 MT7621 + **32MB NOR（跑系统）+ 内置 eMMC（约 55GB 闲置数据分区 `/dev/mmcblk0p4`）**。系统本身只用 NOR，那 55GB 完全空着，可格式化成 ext4 挂到 `/mnt/data` 当本地存储用。
+
+```sh
+# 1) 装 ext4 内核模块 + 自动挂载工具（OpenWrt 默认不带 ext4 模块）
+apk update
+apk add kmod-fs-ext4 block-mount
+modprobe ext4
+
+# 2) 首次格式化（会清空原京东云数据，仅首次执行一次）
+mkfs.ext4 -F -L JD-DATA /dev/mmcblk0p4
+
+# 3) 挂载
+mkdir -p /mnt/data
+mount /dev/mmcblk0p4 /mnt/data
+
+# 4) 写 fstab，重启自动挂载
+uci set fstab.data=mount
+uci set fstab.data.target='/mnt/data'
+uci set fstab.data.device='/dev/mmcblk0p4'
+uci set fstab.data.fstype='ext4'
+uci set fstab.data.options='rw,relatime'
+uci set fstab.data.enabled='1'
+uci set fstab.data.enabled_fsck='0'
+uci commit fstab
+/etc/init.d/fstab enable
+block mount
+```
+
+> 🔴 **坑**：OpenWrt 默认**没加载 ext4 内核模块**，直接 `mount` 会报 `Invalid argument`。必须先 `apk add kmod-fs-ext4 block-mount` 并 `modprobe ext4`，否则挂载失败。装完 `df -h /mnt/data` 应能看到约 51GB 可用空间。
+
 ---
 
 ## 六、常见问题
@@ -127,6 +186,8 @@
 - **Breed 报「闪存布局无效」？** 常规模式不认 FIT 格式 sysupgrade，改用「内存启动」中转（方案 A）。
 - **刷完进不去、80/443 全关？** 多半刷了 openwrt-ai(Kwrt) 之类极简版（无 LuCI、SSH 密码非页面所写）。换官方 25.12 固件即可。
 - **包管理器？** OpenWrt 25.12 用 `apk`（`apk update` / `apk add`），不是老版的 `opkg`。
+- **WiFi 开了但搜不到 SSID？** OpenWrt 的「射频开关」和「SSID 接口开关」是两层，必须 `radioN.disabled` 和 `default_radioN.disabled` **都设 0** 才会发信号（见第 7 步）。
+- **`mount /dev/mmcblk0p4` 报 `Invalid argument`？** 默认内核没带 ext4 模块，先 `apk add kmod-fs-ext4 block-mount` 并 `modprobe ext4`（见第 8 步）。
 
 ---
 
